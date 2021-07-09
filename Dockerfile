@@ -1,0 +1,14 @@
+FROM python:3.9-slim-buster
+
+RUN apt-get update && \
+    apt-get -y install git
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+WORKDIR app/
+
+EXPOSE 8501
+ENTRYPOINT ["streamlit","run"]
+CMD ["dashboard.py"]
