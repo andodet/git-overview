@@ -9,6 +9,14 @@ from repo import get_all_commits
 
 @st.cache
 def get_data(repo_path):
+    """
+    Retrieve commit history from remote source or local .json file
+
+    Args:
+        repo_path: File st.text_input or st.file_uploader
+    Returns:
+        pandas.DataFrame: A dataframae containing the commit history
+    """
     if isinstance(repo_path, UploadedFile):
         data = pd.read_json(repo_path, orient="records")
     else:
@@ -25,6 +33,7 @@ def get_data(repo_path):
 
 
 def get_top_contributors(data):
+    """Rank contributors by number of commits"""
     # fmt: off
     res = (
         data.groupby("author")["hash"]
@@ -37,6 +46,7 @@ def get_top_contributors(data):
 
 
 def get_repo_stats(data):
+    """Get some high level repository statistics"""
     repo_stats = {
         "Commits": (f"{data['hash'].count():,}", "📃"),
         "Merges": (f"{data['is_merge'].value_counts()[0]:,}", "⛙"),
@@ -50,10 +60,16 @@ def get_repo_stats(data):
 
 def get_contributor_stats(data, contributor):
     """
-    Contributor stats:
-        * Changes (commits)
-        * Total lines (breakdown added/removed)
-        * Avg Chage (avg lines/change)
+    Gets some high level statistics on a given contributor
+
+    Args:
+        data (pd.DataFrame): A commit history
+        contributor (str): The name of the target contributor
+    Returns:
+        (tuple): tuple containing:
+
+            stats (dict): Dict containing contributor metrics
+            quarterly_contrib (pd.DataFrame): Dataframe with n. contributions by quarter.
     """
     if not contributor:
         return None, None
@@ -90,11 +106,13 @@ def get_contributor_stats(data, contributor):
 
 
 def filter_by_date(df, start, end):
+    """Filter dataframe by date"""
     df = df[(df['committed_on'] >= str(start)) & (df['committed_on'] <= str(end))]
     return df
 
 
 def filter_by_contributor(df, x):
+    """Filter dataframe by contributor"""
     if not x:
         return df
     else:
@@ -108,15 +126,10 @@ def download_data(data):
     Args:
         data (`pd.DataFrame`): A pandas dataframe
     Returns:
-        str: A href link to be fed into the dashboard
+        str: A href link to be fed into the dashboard ui.
     """
     to_download = data.to_csv(index=False)
     b64 = base64.b64encode(to_download.encode()).decode()
     href = f'<a href="data:file/text;base64,{b64}">Download csv file</a>'
 
     return href
-
-
-def format_col_thousands(data, col):
-    data[col] = data.apply(lambda x: "{:,}".format(x[col]), axis=1)
-    return data

@@ -26,6 +26,7 @@ def get_sidebar(data):
 
 
 def get_repo_source():
+    """Gets repo path (remote or uploaded file) and displays relevant UI"""
     input_type = st.sidebar.radio(
         "Input type input (.json/repo link)", ("Local .json", "Repo Link")
     )
@@ -39,6 +40,7 @@ def get_repo_source():
 
 
 def plot_top_contributors(data):
+    """Plots top n contributors in a vertical histogram"""
     bars = (
         alt.Chart(data[:30])
         .mark_bar()
@@ -60,6 +62,7 @@ def plot_top_contributors(data):
 
 
 def plot_daily_contributions(data):
+    """Plots daily commits in a bar chart"""
     agg = (
         data.groupby(pd.Grouper(key="committed_on", freq="1D"))["hash"]
         .count()
@@ -83,6 +86,7 @@ def plot_daily_contributions(data):
 
 
 def plot_inserts_deletions(data):
+    """Plots daily lines added/deleted in a bar chart"""
     agg = data.copy()
     agg["lines_deleted"] = -agg["lines_deleted"]
     agg = (
@@ -115,6 +119,7 @@ def plot_inserts_deletions(data):
 
 
 def plot_cum_commits(data):
+    """Plots cumulative commits for sidebar plot"""
     added_commits_cumsum = (
         data.groupby(pd.Grouper(key="committed_on", freq="1D"))["hash"]
         .count()
@@ -144,6 +149,7 @@ def plot_cum_commits(data):
 
 
 def plot_commit_waffle(data):
+    """Plots waffle-charte (github-like) with commits by dow/week"""
     daily_commits = (
         data.groupby(pd.Grouper(key="committed_on", freq="1D"))["hash"]
         .count()
@@ -193,6 +199,7 @@ def plot_commit_waffle(data):
 
 
 def plot_cumulative_lines_by_contributor(data, n=20):
+    """Plots cumulative lines by contributor"""
     top_n = (
         data.groupby("author")["hash"]
         .count()
@@ -250,6 +257,7 @@ def plot_cumulative_lines_by_contributor(data, n=20):
 
 
 def plot_quarterly_commits(data):
+    """Plots n_commits aggregated by quarter"""
     plot = (
         alt.Chart(data)
         .mark_area()
