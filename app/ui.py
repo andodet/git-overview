@@ -182,7 +182,13 @@ def plot_commit_waffle(data):
             x=alt.X("week:O", title="Week"),
             y=alt.Y("day(committed_on):O", title=""),
             color=alt.Color(
-                "hash:Q", scale=alt.Scale(range=["transparent", "green"]), title="Commits"
+                # FIXME: settings scales like this might lead to potential problems in
+                #   some cases. Ideally, we'd need to recompute scales each time the
+                #   upper bound each and every interaction.
+                #   (https://stackoverflow.com/questions/68329301/fix-scale-botttom-colour-on-0-in-altair)  # noqa: E501
+                "hash:Q",
+                scale=alt.Scale(range=["transparent", "green"]),
+                title="Commits",
             ),
             tooltip=[
                 alt.Tooltip("committed_on", title="Date"),
