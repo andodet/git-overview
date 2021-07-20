@@ -2,6 +2,7 @@ import streamlit as st
 
 import ui
 import utils
+from pathlib import Path
 
 
 def body(commit_history):
@@ -67,9 +68,9 @@ if __name__ == "__main__":
     st.set_page_config(layout="wide")
 
     repo_source = ui.get_repo_source()
-    try:
+    if not repo_source:
+        # Use github readme as dashboard instructions
+        st.markdown(Path(Path(__file__).parents[1], "README.md").read_text())
+    else:
         commit_history = utils.get_data(repo_source)
         body = body(commit_history)
-    except Exception as e:
-        print(e)
-        st.warning("Something went wrong when retrieving data!")
