@@ -1,6 +1,6 @@
 # Git repository activity dashboard
 
-This repo contains all the code produced for [this](https://anddt.com/git-streamlit/) blog post. Through
+This repo contains all the code produced for [this](https://anddt.com/post/streamlit-git-viz/) blog post. Through
 the streamlit dashboard it's possible to explore the following metrics on a target git repository:
 
 * Commits over time (waffle github-like activity chart)
