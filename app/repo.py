@@ -23,7 +23,7 @@ def get_all_commits(path, since=None, to=None):
         to = datetime.strptime(to, "%Y-%m-%d")
         since = datetime.strptime(since, "%Y-%m-%d")
 
-    repo = Repository(path, num_workers=8, since=since, to=to)
+    repo = Repository(path, num_workers=10, since=since, to=to)
 
     res = []
     print("Retrieving commits...")
@@ -37,8 +37,11 @@ def get_all_commits(path, since=None, to=None):
                 "lines_added": commit.insertions,
                 "lines_deleted": commit.deletions,
                 "files_touched": commit.files,
-                "dmm_unit_complexity": commit.dmm_unit_complexity,
-                "dmm_unit_interfacing": commit.dmm_unit_interfacing,
+                # These two lines are accountable for a 10x slowdown runtime when
+                #   processing commit histories. On a 7k commits repo this brings
+                #   total runtime from 32min to ~3min.
+                #"dmm_unit_complexity": commit.dmm_unit_complexity,
+                #"dmm_unit_interfacing": commit.dmm_unit_interfacing,
                 "is_merge": commit.merge,
                 "message": commit.msg,
             }
