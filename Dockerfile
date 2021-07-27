@@ -11,4 +11,4 @@ WORKDIR app/
 
 EXPOSE 8501
 ENTRYPOINT ["streamlit","run"]
-CMD ["dashboard.py"]
+CMD ["dashboard.py", "--server.port=8080", "--server.address=0.0.0.0"]
