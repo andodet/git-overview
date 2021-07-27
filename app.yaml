@@ -1,0 +1,3 @@
+service: git-streamlit
+runtime: custom
+env: flex
