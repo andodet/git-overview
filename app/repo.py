@@ -40,8 +40,8 @@ def get_all_commits(path, since=None, to=None):
                 # These two lines are accountable for a 10x slowdown runtime when
                 #   processing commit histories. On a 7k commits repo this brings
                 #   total runtime from 32min to ~3min.
-                #"dmm_unit_complexity": commit.dmm_unit_complexity,
-                #"dmm_unit_interfacing": commit.dmm_unit_interfacing,
+                # "dmm_unit_complexity": commit.dmm_unit_complexity,
+                # "dmm_unit_interfacing": commit.dmm_unit_interfacing,
                 "is_merge": commit.merge,
                 "message": commit.msg,
             }
