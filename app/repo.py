@@ -2,6 +2,7 @@ import argparse
 import csv
 import json
 from datetime import datetime
+from urllib.parse import urlparse
 
 from pydriller import Repository
 from tqdm import tqdm
@@ -24,6 +25,10 @@ def get_all_commits(path, since=None, to=None):
         since = datetime.strptime(since, "%Y-%m-%d")
 
     repo = Repository(path, num_workers=10, since=since, to=to)
+
+    # Massage url if dealing with a remote repository
+    if urlparse(path).scheme:
+        path += ".git"
 
     res = []
     print("Retrieving commits...")
